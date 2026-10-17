@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Football Stats</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #090909;
+      color: #f5f5f5;
+      font-family: Arial, Helvetica, sans-serif;
+      padding: 28px 16px;
+    }
+
+    .contenedor {
+      width: 100%;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #303030;
+      padding-bottom: 22px;
+      margin-bottom: 26px;
+    }
+
+    .marca {
+      font-size: 25px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .subtitulo {
+      color: #929292;
+      font-size: 12px;
+      margin-top: 7px;
+      letter-spacing: 1px;
+    }
+
+    .conexion {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    .punto {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #777;
+    }
+
+    .punto.ok {
+      background: #fff;
+    }
+
+    .punto.error {
+      background: #777;
+    }
+
+    .principal {
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 18px;
+      padding: 28px;
+      margin-bottom: 18px;
+    }
+
+    .etiqueta {
+      color: #a5a5a5;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+    }
+
+    .valor-principal {
+      font-size: clamp(52px, 10vw, 88px);
+      font-weight: 800;
+      margin: 16px 0 8px;
+      letter-spacing: -3px;
+      overflow-wrap: anywhere;
+    }
+
+    .unidad {
+      font-size: 22px;
+      color: #999;
+      letter-spacing: 0;
+    }
+
+    .estado {
+      display: inline-block;
+      border: 1px solid #444;
+      border-radius: 30px;
+      padding: 8px 13px;
+      font-size: 12px;
+      margin-top: 14px;
+    }
+
+    .barra-fondo {
+      height: 6px;
+      background: #292929;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 24px;
+    }
+
+    .barra {
+      height: 100%;
+      width: 0%;
+      background: #f5f5f5;
+      transition: width 0.15s ease;
+    }
+
+    .rejilla {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .tarjeta {
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 15px;
+      padding: 21px;
+      min-width: 0;
+    }
+
+    .numero {
+      font-size: clamp(24px, 4vw, 35px);
+      font-weight: 700;
+      margin-top: 15px;
+      overflow-wrap: anywhere;
+    }
+
+    .unidad-chica {
+      color: #999;
+      font-size: 13px;
+      font-weight: normal;
+    }
+
+    .seccion-titulo {
+      font-size: 17px;
+      margin-bottom: 15px;
+    }
+
+    .historial {
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 15px;
+      padding: 22px;
+    }
+
+    .fila {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 15px 0;
+      border-bottom: 1px solid #292929;
+    }
+
+    .fila:last-child {
+      border-bottom: none;
+    }
+
+    .fila-nombre {
+      color: #aaa;
+      font-size: 13px;
+    }
+
+    .fila-valor {
+      font-weight: 700;
+      font-size: 16px;
+      text-align: right;
+    }
+
+    .vacio {
+      color: #777;
+      font-size: 14px;
+      padding: 18px 0;
+    }
+
+    .pie {
+      color: #777;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 650px) {
+      .rejilla {
+        grid-template-columns: 1fr;
+      }
+
+      .principal {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="contenedor">
+    <header>
+      <div>
+        <div class="marca">FOOTBALL STATS</div>
+        <div class="subtitulo">SISTEMA DE MEDICIÓN DE REMATES</div>
+      </div>
+
+      <div class="conexion">
+        <span class="punto" id="puntoConexion"></span>
+        <span id="conexion">Conectando...</span>
+      </div>
+    </header>
+
+    <section class="principal">
+      <div class="etiqueta">Lectura en vivo</div>
+
+      <div class="valor-principal">
+        <span id="lectura">--</span>
+        <span class="unidad" id="unidad">kg</span>
+      </div>
+
+      <span class="estado" id="estado">Esperando datos...</span>
+
+      <div class="barra-fondo">
+        <div class="barra" id="barra"></div>
+      </div>
+    </section>
+
+    <section class="rejilla">
+      <article class="tarjeta">
+        <div class="etiqueta">Último remate</div>
+        <div class="numero">
+          <span id="ultimoPico">--</span>
+          <span class="unidad-chica" id="unidadUltimo">kg</span>
+        </div>
+      </article>
+
+      <article class="tarjeta">
+        <div class="etiqueta">Récord de sesión</div>
+        <div class="numero">
+          <span id="recordSesion">--</span>
+          <span class="unidad-chica" id="unidadRecord">kg</span>
+        </div>
+      </article>
+
+      <article class="tarjeta">
+        <div class="etiqueta">Remates registrados</div>
+        <div class="numero" id="numeroGolpe">0</div>
+      </article>
+    </section>
+
+    <section class="historial">
+      <h2 class="seccion-titulo">Historial de remates</h2>
+      <div id="listaHistorial">
+        <div class="vacio">Esperando el primer remate...</div>
+      </div>
+    </section>
+
+    <div class="pie">
+      Actualización automática desde Firebase Realtime Database.
+      <br>
+      La unidad y los valores dependen de la calibración real del sensor.
+      <br>
+      Última consulta: <span id="ultimaConsulta">--</span>
+    </div>
+  </main>
+
+  <script>
+    const FIREBASE_URL =
+      "https://medidor-de-fuerza-2026-default-rtdb.firebaseio.com/medidor.json";
+
+    const $ = (id) => document.getElementById(id);
+
+    let historial = [];
+    let ultimoNumeroDetectado = null;
+    let primerDato = true;
+
+    function formato(valor) {
+      const n = Number(valor);
+      return Number.isFinite(n) ? n.toFixed(2) : "--";
+    }
+
+    function mostrarHistorial() {
+      const lista = $("listaHistorial");
+
+      if (historial.length === 0) {
+        lista.innerHTML =
+          '<div class="vacio">Todavía no hay remates registrados.</div>';
+        return;
+      }
+
+      lista.innerHTML = historial.map((golpe) => `
+        <div class="fila">
+          <div>
+            <div class="fila-nombre">Remate #${golpe.numero}</div>
+            <div class="fila-nombre">${golpe.hora}</div>
+          </div>
+          <div class="fila-valor">
+            ${formato(golpe.pico)}
+            <span class="unidad-chica">kg</span>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function registrarNuevoRemate(datos) {
+      const numero = Number(datos.numeroGolpe || 0);
+      const pico = Number(datos.ultimoPico || 0);
+
+      if (ultimoNumeroDetectado === null) {
+        ultimoNumeroDetectado = numero;
+        return;
+      }
+
+      if (numero > ultimoNumeroDetectado) {
+        for (
+          let n = ultimoNumeroDetectado + 1;
+          n <= numero;
+          n++
+        ) {
+          historial.unshift({
+            numero: n,
+            pico: pico,
+            hora: new Date().toLocaleTimeString("es-AR")
+          });
+        }
+
+        historial = historial.slice(0, 10);
+        mostrarHistorial();
+      }
+
+      ultimoNumeroDetectado = numero;
+    }
+
+    async function actualizarDatos() {
+      try {
+        const respuesta = await fetch(
+          FIREBASE_URL + "?t=" + Date.now(),
+          { cache: "no-store" }
+        );
+
+        if (!respuesta.ok) {
+          throw new Error("HTTP " + respuesta.status);
+        }
+
+        const datos = await respuesta.json();
+
+        if (!datos || typeof datos !== "object") {
+          throw new Error("Firebase todavía no tiene datos");
+        }
+
+        $("conexion").textContent = "Firebase conectado";
+        $("puntoConexion").className = "punto ok";
+
+        $("lectura").textContent = formato(datos.lectura);
+        $("ultimoPico").textContent = formato(datos.ultimoPico);
+        $("recordSesion").textContent = formato(datos.recordSesion);
+        $("numeroGolpe").textContent = Number(datos.numeroGolpe || 0);
+
+        $("estado").textContent = datos.estado || "Sin estado";
+
+        const unidad = datos.unidad || "kg";
+        $("unidad").textContent = unidad;
+        $("unidadUltimo").textContent = unidad;
+        $("unidadRecord").textContent = unidad;
+
+        const pico = Math.max(0, Number(datos.picoActual || 0));
+        const maximoVisual = Math.max(
+          1,
+          Number(datos.recordSesion || 0),
+          pico
+        );
+
+        $("barra").style.width =
+          Math.min(100, (pico / maximoVisual) * 100) + "%";
+
+        registrarNuevoRemate(datos);
+
+        // No se registra como nuevo remate el dato inicial
+        // que ya existía en Firebase al abrir la página.
+        if (primerDato) {
+          historial = [];
+          ultimoNumeroDetectado = Number(datos.numeroGolpe || 0);
+          primerDato = false;
+          mostrarHistorial();
+        }
+
+        $("ultimaConsulta").textContent =
+          new Date().toLocaleTimeString("es-AR");
+
+      } catch (error) {
+        $("conexion").textContent = "Error de conexión";
+        $("puntoConexion").className = "punto error";
+        $("estado").textContent = error.message;
+      }
+    }
+
+    actualizarDatos();
+    setInterval(actualizarDatos, 1000);
+  </script>
+</body>
+</html>
