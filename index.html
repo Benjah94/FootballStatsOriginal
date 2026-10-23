@@ -14,15 +14,14 @@
     }
 
     body {
-      background: #090909;
+      background: #080808;
       color: #f5f5f5;
       font-family: Arial, Helvetica, sans-serif;
       padding: 28px 16px;
     }
 
     .contenedor {
-      width: 100%;
-      max-width: 1100px;
+      max-width: 1050px;
       margin: auto;
     }
 
@@ -30,11 +29,11 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 15px;
       flex-wrap: wrap;
+      gap: 16px;
       border-bottom: 1px solid #303030;
       padding-bottom: 22px;
-      margin-bottom: 26px;
+      margin-bottom: 25px;
     }
 
     .marca {
@@ -44,7 +43,7 @@
     }
 
     .subtitulo {
-      color: #929292;
+      color: #888;
       font-size: 12px;
       margin-top: 7px;
       letter-spacing: 1px;
@@ -53,52 +52,51 @@
     .conexion {
       display: flex;
       align-items: center;
-      gap: 9px;
-      color: #aaa;
+      gap: 8px;
       font-size: 13px;
+      color: #bbb;
     }
 
     .punto {
       width: 9px;
       height: 9px;
-      border-radius: 50%;
       background: #777;
+      border-radius: 50%;
     }
 
     .punto.ok {
       background: #fff;
     }
 
-    .punto.error {
-      background: #777;
+    .principal, .tarjeta, .historial {
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 16px;
     }
 
     .principal {
-      background: #111;
-      border: 1px solid #292929;
-      border-radius: 18px;
       padding: 28px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .etiqueta {
-      color: #a5a5a5;
       font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 1.5px;
+      color: #999;
     }
 
     .valor-principal {
-      font-size: clamp(52px, 10vw, 88px);
+      font-size: clamp(52px, 10vw, 86px);
       font-weight: 800;
-      margin: 16px 0 8px;
       letter-spacing: -3px;
+      margin: 16px 0;
       overflow-wrap: anywhere;
     }
 
     .unidad {
-      font-size: 22px;
       color: #999;
+      font-size: 20px;
       letter-spacing: 0;
     }
 
@@ -108,13 +106,12 @@
       border-radius: 30px;
       padding: 8px 13px;
       font-size: 12px;
-      margin-top: 14px;
     }
 
     .barra-fondo {
       height: 6px;
       background: #292929;
-      border-radius: 20px;
+      border-radius: 10px;
       overflow: hidden;
       margin-top: 24px;
     }
@@ -122,8 +119,8 @@
     .barra {
       height: 100%;
       width: 0%;
-      background: #f5f5f5;
-      transition: width 0.15s ease;
+      background: #fff;
+      transition: width .1s linear;
     }
 
     .rejilla {
@@ -134,15 +131,12 @@
     }
 
     .tarjeta {
-      background: #111;
-      border: 1px solid #292929;
-      border-radius: 15px;
-      padding: 21px;
+      padding: 22px;
       min-width: 0;
     }
 
     .numero {
-      font-size: clamp(24px, 4vw, 35px);
+      font-size: clamp(25px, 4vw, 35px);
       font-weight: 700;
       margin-top: 15px;
       overflow-wrap: anywhere;
@@ -154,16 +148,13 @@
       font-weight: normal;
     }
 
-    .seccion-titulo {
-      font-size: 17px;
-      margin-bottom: 15px;
+    .historial {
+      padding: 22px;
     }
 
-    .historial {
-      background: #111;
-      border: 1px solid #292929;
-      border-radius: 15px;
-      padding: 22px;
+    .titulo-historial {
+      font-size: 17px;
+      margin-bottom: 14px;
     }
 
     .fila {
@@ -179,28 +170,29 @@
       border-bottom: none;
     }
 
-    .fila-nombre {
-      color: #aaa;
+    .detalle {
+      color: #999;
       font-size: 13px;
+      margin-top: 5px;
     }
 
-    .fila-valor {
-      font-weight: 700;
-      font-size: 16px;
+    .valor-fila {
+      font-size: 17px;
+      font-weight: bold;
       text-align: right;
     }
 
     .vacio {
       color: #777;
       font-size: 14px;
-      padding: 18px 0;
+      padding: 15px 0;
     }
 
-    .pie {
+    footer {
+      margin-top: 20px;
       color: #777;
       font-size: 12px;
-      line-height: 1.6;
-      margin-top: 20px;
+      line-height: 1.7;
     }
 
     @media (max-width: 650px) {
@@ -217,15 +209,16 @@
 
 <body>
   <main class="contenedor">
+
     <header>
       <div>
         <div class="marca">FOOTBALL STATS</div>
-        <div class="subtitulo">SISTEMA DE MEDICIÓN DE REMATES</div>
+        <div class="subtitulo">MEDIDOR DE FUERZA DE REMATE</div>
       </div>
 
       <div class="conexion">
         <span class="punto" id="puntoConexion"></span>
-        <span id="conexion">Conectando...</span>
+        <span id="conexion">Conectando a Firebase...</span>
       </div>
     </header>
 
@@ -237,7 +230,7 @@
         <span class="unidad" id="unidad">kg</span>
       </div>
 
-      <span class="estado" id="estado">Esperando datos...</span>
+      <div class="estado" id="estado">Esperando datos...</div>
 
       <div class="barra-fondo">
         <div class="barra" id="barra"></div>
@@ -268,89 +261,107 @@
     </section>
 
     <section class="historial">
-      <h2 class="seccion-titulo">Historial de remates</h2>
+      <h2 class="titulo-historial">Historial de remates</h2>
       <div id="listaHistorial">
-        <div class="vacio">Esperando el primer remate...</div>
+        <div class="vacio">Todavía no hay remates registrados.</div>
       </div>
     </section>
 
-    <div class="pie">
-      Actualización automática desde Firebase Realtime Database.
+    <footer>
+      Datos recibidos desde Firebase Realtime Database.
       <br>
-      La unidad y los valores dependen de la calibración real del sensor.
+      Última actualización: <span id="actualizacion">--</span>
       <br>
-      Última consulta: <span id="ultimaConsulta">--</span>
-    </div>
+      El historial de esta página se conserva mientras no se recargue.
+    </footer>
+
   </main>
 
   <script>
     const FIREBASE_URL =
       "https://medidor-de-fuerza-2026-default-rtdb.firebaseio.com/medidor.json";
 
-    const $ = (id) => document.getElementById(id);
+    const $ = id => document.getElementById(id);
 
+    let ultimoNumero = null;
     let historial = [];
-    let ultimoNumeroDetectado = null;
-    let primerDato = true;
 
     function formato(valor) {
-      const n = Number(valor);
-      return Number.isFinite(n) ? n.toFixed(2) : "--";
+      const numero = Number(valor);
+      return Number.isFinite(numero) ? numero.toFixed(2) : "--";
     }
 
     function mostrarHistorial() {
-      const lista = $("listaHistorial");
-
       if (historial.length === 0) {
-        lista.innerHTML =
-          '<div class="vacio">Todavía no hay remates registrados.</div>';
+        $("listaHistorial").innerHTML =
+          '<div class="vacio">Todavía no hay remates nuevos.</div>';
         return;
       }
 
-      lista.innerHTML = historial.map((golpe) => `
+      $("listaHistorial").innerHTML = historial.map(item => `
         <div class="fila">
           <div>
-            <div class="fila-nombre">Remate #${golpe.numero}</div>
-            <div class="fila-nombre">${golpe.hora}</div>
+            <strong>Remate #${item.numero}</strong>
+            <div class="detalle">${item.hora}</div>
           </div>
-          <div class="fila-valor">
-            ${formato(golpe.pico)}
+          <div class="valor-fila">
+            ${formato(item.pico)}
             <span class="unidad-chica">kg</span>
           </div>
         </div>
       `).join("");
     }
 
-    function registrarNuevoRemate(datos) {
-      const numero = Number(datos.numeroGolpe || 0);
-      const pico = Number(datos.ultimoPico || 0);
+    function actualizarPantalla(datos) {
+      $("lectura").textContent = formato(datos.lectura);
+      $("ultimoPico").textContent = formato(datos.ultimoPico);
+      $("recordSesion").textContent = formato(datos.recordSesion);
+      $("numeroGolpe").textContent = Number(datos.numeroGolpe || 0);
 
-      if (ultimoNumeroDetectado === null) {
-        ultimoNumeroDetectado = numero;
-        return;
-      }
+      $("estado").textContent = datos.estado || "Sin estado";
 
-      if (numero > ultimoNumeroDetectado) {
-        for (
-          let n = ultimoNumeroDetectado + 1;
-          n <= numero;
-          n++
-        ) {
+      const unidad = datos.unidad || "kg";
+      $("unidad").textContent = unidad;
+      $("unidadUltimo").textContent = unidad;
+      $("unidadRecord").textContent = unidad;
+
+      const pico = Math.max(0, Number(datos.picoActual || 0));
+      const record = Math.max(0, Number(datos.recordSesion || 0));
+      const escala = Math.max(pico, record, 0.01);
+
+      $("barra").style.width =
+        Math.min(100, pico / escala * 100) + "%";
+
+      const numeroActual = Number(datos.numeroGolpe || 0);
+
+      if (ultimoNumero === null) {
+        ultimoNumero = numeroActual;
+      } else if (numeroActual > ultimoNumero) {
+        // Si se registraron varios golpes entre consultas,
+        // añadimos una entrada por cada número nuevo.
+        for (let n = ultimoNumero + 1; n <= numeroActual; n++) {
           historial.unshift({
             numero: n,
-            pico: pico,
+            pico: Number(datos.ultimoPico || 0),
             hora: new Date().toLocaleTimeString("es-AR")
           });
         }
 
         historial = historial.slice(0, 10);
         mostrarHistorial();
+        ultimoNumero = numeroActual;
+      } else if (numeroActual < ultimoNumero) {
+        // Se reiniciaron los registros desde Arduino.
+        ultimoNumero = numeroActual;
+        historial = [];
+        mostrarHistorial();
       }
 
-      ultimoNumeroDetectado = numero;
+      $("actualizacion").textContent =
+        new Date().toLocaleTimeString("es-AR");
     }
 
-    async function actualizarDatos() {
+    async function consultarFirebase() {
       try {
         const respuesta = await fetch(
           FIREBASE_URL + "?t=" + Date.now(),
@@ -358,63 +369,29 @@
         );
 
         if (!respuesta.ok) {
-          throw new Error("HTTP " + respuesta.status);
+          throw new Error("Firebase HTTP " + respuesta.status);
         }
 
         const datos = await respuesta.json();
 
         if (!datos || typeof datos !== "object") {
-          throw new Error("Firebase todavía no tiene datos");
+          throw new Error("La ruta /medidor todavía no tiene datos");
         }
+
+        actualizarPantalla(datos);
 
         $("conexion").textContent = "Firebase conectado";
         $("puntoConexion").className = "punto ok";
 
-        $("lectura").textContent = formato(datos.lectura);
-        $("ultimoPico").textContent = formato(datos.ultimoPico);
-        $("recordSesion").textContent = formato(datos.recordSesion);
-        $("numeroGolpe").textContent = Number(datos.numeroGolpe || 0);
-
-        $("estado").textContent = datos.estado || "Sin estado";
-
-        const unidad = datos.unidad || "kg";
-        $("unidad").textContent = unidad;
-        $("unidadUltimo").textContent = unidad;
-        $("unidadRecord").textContent = unidad;
-
-        const pico = Math.max(0, Number(datos.picoActual || 0));
-        const maximoVisual = Math.max(
-          1,
-          Number(datos.recordSesion || 0),
-          pico
-        );
-
-        $("barra").style.width =
-          Math.min(100, (pico / maximoVisual) * 100) + "%";
-
-        registrarNuevoRemate(datos);
-
-        // No se registra como nuevo remate el dato inicial
-        // que ya existía en Firebase al abrir la página.
-        if (primerDato) {
-          historial = [];
-          ultimoNumeroDetectado = Number(datos.numeroGolpe || 0);
-          primerDato = false;
-          mostrarHistorial();
-        }
-
-        $("ultimaConsulta").textContent =
-          new Date().toLocaleTimeString("es-AR");
-
       } catch (error) {
-        $("conexion").textContent = "Error de conexión";
-        $("puntoConexion").className = "punto error";
+        $("conexion").textContent = "Sin conexión";
+        $("puntoConexion").className = "punto";
         $("estado").textContent = error.message;
       }
     }
 
-    actualizarDatos();
-    setInterval(actualizarDatos, 1000);
+    consultarFirebase();
+    setInterval(consultarFirebase, 1000);
   </script>
 </body>
 </html>
